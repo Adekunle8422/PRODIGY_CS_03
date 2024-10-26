@@ -1,0 +1,59 @@
+import string
+
+password = input("Enter the password:")
+
+
+uppercase = any(c in string.ascii_uppercase for c in password)
+lowercase = any(c in string.ascii_lowercase for c in password)
+special = any(c in string.punctuation for c in password)
+digits = any(c in string.digits for c in password)
+
+characters = [uppercase, lowercase, special, digits]
+
+length = len(password)
+score = 0
+
+
+try:
+    with open('10k most common.txt', 'r') as f:
+        common = f.read().splitlines()
+except FileNotFoundError:
+    print("Common passwords file not found.")
+    exit()
+
+if password in common:
+    print("Password was found in a common list. Score: 0/10")
+    exit()
+
+
+if length > 9:
+    score += 1
+if length > 14:
+    score += 1
+if length > 18:
+    score += 1
+if length > 22:
+    score += 2 
+
+print(f"Password length is {length}, adding {score} points!")
+
+
+if sum(characters) > 1:
+    score += 2
+if sum(characters) > 2:
+    score += 1 
+if sum(characters) > 3:
+    score += 2
+
+print(f"Password has {sum(characters)} different character types, adding {sum(characters) - 1} points!")
+
+
+if score < 7:
+    print(f"The password is too weak! Score: {score}/10")
+elif score == 7:
+    print(f"The password is okay! Score: {score}/10")
+elif score > 7 and score < 8:
+    print(f"The password is a little bit strong! Score: {score}/10")
+elif score >= 10:
+    print(f"The password is very strong! Score: {score}/10")
+    
